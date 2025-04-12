@@ -566,6 +566,14 @@ static CURLcode canon_string(const char *q, size_t len,
   return result;
 }
 
+#ifdef UNITTESTS
+/* used by unit1979.c */
+CURLcode Curl_canon_string(const char *q, size_t len,
+  struct dynbuf *dq, bool *found_equals)
+{
+  return canon_string(q, len, dq, found_equals);
+}
+#endif
 
 static CURLcode canon_query(struct Curl_easy *data,
                             const char *query, struct dynbuf *dq)

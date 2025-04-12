@@ -1,5 +1,3 @@
-#ifndef HEADER_CURL_HTTP_AWS_SIGV4_H
-#define HEADER_CURL_HTTP_AWS_SIGV4_H
 /***************************************************************************
  *                                  _   _ ____  _
  *  Project                     ___| | | |  _ \| |
@@ -11,7 +9,7 @@
  *
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
- * are also available at https://curl.haxx.se/docs/copyright.html.
+ * are also available at https://curl.se/docs/copyright.html.
  *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
@@ -23,17 +21,35 @@
  * SPDX-License-Identifier: curl
  *
  ***************************************************************************/
-#include "curl_setup.h"
+#include "curlcheck.h"
+#include "http_aws_sigv4.h"
 #include "dynbuf.h"
-#include "urldata.h"
 
-/* this is for creating aws_sigv4 header output */
-CURLcode Curl_output_aws_sigv4(struct Curl_easy *data);
+struct dynbuf canonical_path;
 
-#ifdef UNITTESTS
-/* used by unit1979.c */
-CURLcode Curl_canon_string(const char *q, size_t len,
-  struct dynbuf *dq, bool *found_equals);
-#endif
+static CURLcode unit_setup(void)
+{
+  Curl_dyn_init(&canonical_path, CURL_MAX_HTTP_HEADER);
+  return CURLE_OK;
+}
 
-#endif /* HEADER_CURL_HTTP_AWS_SIGV4_H */
+static void unit_stop(void)
+{
+}
+
+UNITTEST_START
+{
+
+  /**
+   * testing canon_string
+   * case 1:
+   * handle //example// correctly (get-slashes-normalized)
+  */
+ const char *path = "//example//";
+ const char *correct_path = "/example/";
+ Curl_canon_string(path, strlen(path), &canonical_path, NULL);
+ fail_unless(strcmp(Curl_dyn_ptr(&canonical_path), correct_path),
+ "Not normalizing slashes correctly");
+
+}
+UNITTEST_STOP

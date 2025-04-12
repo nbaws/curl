@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb-dap",
+            "request": "launch",
+            "name": "Launch",
+            "program": "${workspaceRoot}/src/curl",
+            "args": [ "-v",
+                "https://s3tables.us-east-1.amazonaws.com:443/tables/arn%3Aaws%3As3tables%3Aus-east-1%3A022954301426%3Abucket%2Fjasoehartablebucket/jasoeharnamespace/jasoehartable/encryption",
+                                              "--user","a:b",
+                                              "-H","x-amz-security-token: token",
+                                              "--aws-sigv4","aws:amz:us-east-1:s3tables",
+                                              "-H","Accept-Encoding: gzip, deflate, br",
+                                              "-H","User-Agent: agent"
+            ],
+            "env": [],
+            "cwd": "${workspaceRoot}"
+        },
+    ]
+}
